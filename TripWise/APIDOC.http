@@ -1,0 +1,56 @@
+###
+POST http://127.0.0.1:8000/register/
+Content-Type: application/json
+
+{
+    "username" : "vandana",
+    "email":"vandana@gmail.com",
+    "password":"vandana@123"
+}
+
+###
+GET http://127.0.0.1:8000/register/
+Accept:  application/json
+
+###
+DELETE http://127.0.0.1:8000/users/1/
+
+
+###
+GET http://127.0.0.1:8000/trips/
+Accept:  application/json
+Authorization: Basic betsy:betsy@123
+
+
+
+###
+POST http://127.0.0.1:8000/trips/
+Content-Type:  application/json
+Authorization: Basic vandana:vandana@123
+
+{
+    "title":"Trip to manali with friends",
+    "destination": "Manali",
+    "start_date" :"2026-12-10"
+}
+
+
+###
+GET http://127.0.0.1:8000/trips/1/
+Accept:  application/json
+Authorization: Basic betsy:betsy@123
+
+###
+PUT http://127.0.0.1:8000/trips/4/
+Content-Type:  application/json
+Authorization: Basic vandana:vandana@123
+
+{
+    "title":"Trip to manali with friends",
+    "destination": "Manali",
+    "start_date" :"2026-12-20"
+}
+
+###
+DELETE http://127.0.0.1:8000/trips/1/ 
+Authorization: Basic betsy:betsy@123
