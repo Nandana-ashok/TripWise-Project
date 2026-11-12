@@ -36,18 +36,18 @@ Authorization: Basic vandana:vandana@123
 
 
 ###
-GET http://127.0.0.1:8000/trips/1/
+GET http://127.0.0.1:8000/trips/2/
 Accept:  application/json
 Authorization: Basic betsy:betsy@123
 
 ###
-PUT http://127.0.0.1:8000/trips/4/
+PUT http://127.0.0.1:8000/trips/2/
 Content-Type:  application/json
-Authorization: Basic vandana:vandana@123
+Authorization: Basic betsy:betsy@123
 
 {
-    "title":"Trip to manali with friends",
-    "destination": "Manali",
+    "title":"Trip to Vagamon",
+    "destination": "Vagamon",
     "start_date" :"2026-12-20"
 }
 

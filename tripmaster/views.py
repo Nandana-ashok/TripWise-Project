@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from tripmaster.serializers import UserSerializer,TripSerializer
 from tripmaster.models import TripDb
 from rest_framework import authentication,permissions,serializers
+from tripmaster.permissions import OwnerOnly
 # Create your views here.
 
 class SignUpView(APIView):
@@ -65,7 +66,7 @@ class TripListCreateView(APIView):
 class TripRetrieveUpdateDeleteView(APIView):
 
     authentication_classes = [authentication.BasicAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [OwnerOnly]
 
     def get(self,request,pk):
 

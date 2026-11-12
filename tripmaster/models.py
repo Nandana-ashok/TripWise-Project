@@ -16,6 +16,19 @@ class TripDb(models.Model):
     def __str__(self):
         return self.title
 
+class TripMemberDb(models.Model):
+
+    trip = models.ForeignKey(TripDb,on_delete=models.CASCADE,related_name="trip_member")
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='trip_membership')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [ models.UniqueConstraint(fields = ['trip','user'],name='unique_trip_member' )]
+
+    def __str__(self):
+        return f"{self.user.username} - {self.trip.title}"
+
+
 
 
 
