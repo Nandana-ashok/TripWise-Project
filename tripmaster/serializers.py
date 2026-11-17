@@ -21,7 +21,7 @@ class TripSerializer(serializers.ModelSerializer):
         read_only_fields = ['id','created_by','created_at','updated_at']
 
 
-class TripMemberSerailizer(serializers.ModelSerializer):
+class TripMemberSerializer(serializers.ModelSerializer):
 
     username = serializers.CharField(write_only=True)
     member_username = serializers.CharField(source='user.username',read_only=True)
@@ -36,8 +36,9 @@ class TripMemberSerailizer(serializers.ModelSerializer):
 
         try:
             user = User.objects.get(username=value)
-        except user.DoesNotExist :
+        except User.DoesNotExist :
             raise serializers.ValidationError('This user is not registered..')
+        
         trip = self.context['trip']
 
         if user == trip.created_by :

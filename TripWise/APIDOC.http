@@ -54,3 +54,25 @@ Authorization: Basic betsy:betsy@123
 ###
 DELETE http://127.0.0.1:8000/trips/1/ 
 Authorization: Basic betsy:betsy@123
+
+#tripmembercreatelistview >>
+
+
+###
+GET http://127.0.0.1:8000/trips/2/members/
+Accept:  application/json
+Authorization: Basic betsy:betsy@123
+
+
+###
+POST http://127.0.0.1:8000/trips/2/members/ 
+Content-Type: application/json
+Authorization: Basic betsy:betsy@123
+
+{
+    "username": "ajas"
+}
+
+###
+DELETE http://127.0.0.1:8000/trips/2/members/1/
+Authorization: Basic betsy:betsy@123

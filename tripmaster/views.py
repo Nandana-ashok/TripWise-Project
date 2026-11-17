@@ -2,10 +2,11 @@ from django.shortcuts import render,get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
-from tripmaster.serializers import UserSerializer,TripSerializer
-from tripmaster.models import TripDb
+from tripmaster.serializers import UserSerializer,TripSerializer,TripMemberSerializer
+from tripmaster.models import TripDb,TripMemberDb
 from rest_framework import authentication,permissions,serializers
 from tripmaster.permissions import OwnerOnly
+from rest_framework.exceptions import PermissionDenied
 # Create your views here.
 
 class SignUpView(APIView):
@@ -104,3 +105,48 @@ class TripRetrieveUpdateDeleteView(APIView):
         raise serializers.ValidationError("Access Denied.....")
 
 
+class TripMemberCreateListView(APIView):
+
+    def get(self,request,trip_id):
+
+        trip_object = get_object_or_404(TripDb,id=trip_id)
+
+        is_owner = trip_object.created_by == request.user
+        is_member = TripMemberDb.objects.filter(trip=trip_object,user=request.user).exists()
+
+        if not (is_owner or is_member):
+            raise PermissionDenied("You are not allowed to see this trip....")
+        members = TripMemberDb.objects.filter(trip=trip_object)
+
+        serializer_instance = TripMemberSerializer(members,many=True)
+        return Response(data=serializer_instance.data)
+
+    def post(self,request,trip_id):
+
+        trip_object = get_object_or_404(TripDb,id=trip_id)
+
+        if trip_object.created_by != request.user :
+            raise PermissionDenied("Only owner can add members to the trip")
+
+        form_data = request.data
+        serializer_instance = TripMemberSerializer(data= form_data,context={'trip':trip_object})
+
+        if serializer_instance.is_valid():
+            serializer_instance.save()
+            return Response({"Message":"Member added succeessfully....."})
+        else:
+            return Response(data=serializer_instance.errors)
+
+class TripMemberDeleteView(APIView):
+    authentication_classes = [authentication.BasicAuthentication]
+    permission_classes = [OwnerOnly]
+
+    def delete(self,request,trip_id,member_id):
+        
+        trip_object = get_object_or_404(TripDb,id=trip_id)
+        if trip_object.created_by != request.user:
+            raise PermissionDenied("Only trip owner has access to delete members.......")
+        else:
+            member_object = get_object_or_404(TripMemberDb,id=member_id,trip=trip_object)
+            member_object.delete()
+            return Response({"Message":"Member deleted successfully...."})
